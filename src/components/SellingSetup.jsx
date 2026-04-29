@@ -1,4 +1,5 @@
 function SellingSetup({
+
     itemName,
     setItemName,
     amount,
@@ -10,58 +11,94 @@ function SellingSetup({
     setupFee,
     marketplaceTax,
     silverReceived
+
 }) {
 
     return (
 
         <div>
 
-            <h3>Selling Setup</h3>
+            <h3 className="text-lg font-semibold mb-4">
+                Selling Setup
+            </h3>
 
-            Item Name
 
-            <input
-                value={itemName}
-                onChange={(e) =>
-                    setItemName(e.target.value)
-                }
-            />
+            <div className="grid grid-cols-2 gap-4">
 
-            Amount
 
-            <input
-                value={amount}
-                onChange={(e) =>
-                    setAmount(e.target.value)
-                }
-            />
+                <div>
 
-            Price Per Item
+                    <label>Item Name</label>
 
-            <input
-                value={pricePerItem}
-                onChange={(e) =>
-                    setPricePerItem(e.target.value)
-                }
-            />
+                    <input
+                        value={itemName}
+                        onChange={(e) =>
+                            setItemName(e.target.value)
+                        }
+                        className="border rounded-lg px-3 py-2 w-full mt-1"
+                    />
 
-            Premium Account
+                </div>
 
-            <input
-                type="checkbox"
-                checked={isPremium}
-                onChange={() =>
-                    setIsPremium(!isPremium)
-                }
-            />
 
-            <p>Setup Fee (2.5%): {setupFee.toFixed(0)}</p>
+                <div>
 
-            <p>Marketplace Tax: {marketplaceTax.toFixed(0)}</p>
+                    <label>Amount</label>
 
-            <p>Silver Received: {silverReceived.toFixed(0)}</p>
+                    <input
+                        value={amount}
+                        onChange={(e) =>
+                            setAmount(e.target.value)
+                        }
+                        className="border rounded-lg px-3 py-2 w-full mt-1"
+                    />
 
-            <hr />
+                </div>
+
+
+                <div>
+
+                    <label>Price Per Item</label>
+
+                    <input
+                        value={pricePerItem}
+                        onChange={(e) =>
+                            setPricePerItem(e.target.value)
+                        }
+                        className="border rounded-lg px-3 py-2 w-full mt-1"
+                    />
+
+                </div>
+
+
+                <div className="flex items-center gap-2 mt-6">
+
+                    <input
+                        type="checkbox"
+                        checked={isPremium}
+                        onChange={() =>
+                            setIsPremium(!isPremium)
+                        }
+                    />
+
+                    Premium Account
+
+                </div>
+
+            </div>
+
+
+            <p className="mt-4">
+                Setup Fee (2.5%): {setupFee.toFixed(0)}
+            </p>
+
+            <p>
+                Marketplace Tax: {marketplaceTax.toFixed(0)}
+            </p>
+
+            <p>
+                Silver Received: {silverReceived.toFixed(0)}
+            </p>
 
         </div>
 

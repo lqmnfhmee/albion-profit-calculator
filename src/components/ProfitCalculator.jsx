@@ -38,6 +38,7 @@ function ProfitCalculator() {
 
     };
 
+
     const addIngredient = () => {
 
         setIngredients([
@@ -46,6 +47,7 @@ function ProfitCalculator() {
         ]);
 
     };
+
 
     const removeIngredient = (index) => {
 
@@ -110,54 +112,88 @@ function ProfitCalculator() {
 
     return (
 
-        <div>
+        <div className="min-h-screen bg-gray-100 p-8">
 
-            <h2>Albion Profit Calculator</h2>
+            <h1 className="text-3xl font-bold mb-6">
+                Albion Profit Calculator
+            </h1>
 
-            <FarmingExpenses
-                city={city}
-                setCity={setCity}
-                babyAnimalCost={babyAnimalCost}
-                setBabyAnimalCost={setBabyAnimalCost}
-                foodCost={foodCost}
-                setFoodCost={setFoodCost}
-                seedCost={seedCost}
-                setSeedCost={setSeedCost}
-                travelCost={travelCost}
-                setTravelCost={setTravelCost}
-                totalFarmingCost={totalFarmingCost}
-            />
 
-            <CraftingExpenses
-                butcherFee={butcherFee}
-                setButcherFee={setButcherFee}
-                craftFee={craftFee}
-                setCraftFee={setCraftFee}
-                ingredients={ingredients}
-                updateIngredient={updateIngredient}
-                addIngredient={addIngredient}
-                removeIngredient={removeIngredient}
-                ingredientCostTotal={ingredientCostTotal}
-                totalCraftingCost={totalCraftingCost}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <SellingSetup
-                itemName={itemName}
-                setItemName={setItemName}
-                amount={amount}
-                setAmount={setAmount}
-                pricePerItem={pricePerItem}
-                setPricePerItem={setPricePerItem}
-                isPremium={isPremium}
-                setIsPremium={setIsPremium}
-                setupFee={setupFee}
-                marketplaceTax={marketplaceTax}
-                silverReceived={silverReceived}
-            />
 
-            <ProfitSummary
-                finalProfit={finalProfit}
-            />
+                <div className="space-y-6">
+
+                    <div className="bg-white p-6 rounded-xl shadow">
+
+                        <FarmingExpenses
+                            city={city}
+                            setCity={setCity}
+                            babyAnimalCost={babyAnimalCost}
+                            setBabyAnimalCost={setBabyAnimalCost}
+                            foodCost={foodCost}
+                            setFoodCost={setFoodCost}
+                            seedCost={seedCost}
+                            setSeedCost={setSeedCost}
+                            travelCost={travelCost}
+                            setTravelCost={setTravelCost}
+                            totalFarmingCost={totalFarmingCost}
+                        />
+
+                    </div>
+
+
+                    <div className="bg-white p-6 rounded-xl shadow">
+
+                        <CraftingExpenses
+                            butcherFee={butcherFee}
+                            setButcherFee={setButcherFee}
+                            craftFee={craftFee}
+                            setCraftFee={setCraftFee}
+                            ingredients={ingredients}
+                            updateIngredient={updateIngredient}
+                            addIngredient={addIngredient}
+                            removeIngredient={removeIngredient}
+                            ingredientCostTotal={ingredientCostTotal}
+                            totalCraftingCost={totalCraftingCost}
+                        />
+
+                    </div>
+
+                </div>
+
+
+                <div className="space-y-6">
+
+                    <div className="bg-white p-6 rounded-xl shadow">
+
+                        <SellingSetup
+                            itemName={itemName}
+                            setItemName={setItemName}
+                            amount={amount}
+                            setAmount={setAmount}
+                            pricePerItem={pricePerItem}
+                            setPricePerItem={setPricePerItem}
+                            isPremium={isPremium}
+                            setIsPremium={setIsPremium}
+                            setupFee={setupFee}
+                            marketplaceTax={marketplaceTax}
+                            silverReceived={silverReceived}
+                        />
+
+                    </div>
+
+
+                    <div className="bg-white p-6 rounded-xl shadow text-center">
+
+                        <ProfitSummary finalProfit={finalProfit} />
+
+                    </div>
+
+                </div>
+
+
+            </div>
 
         </div>
 
