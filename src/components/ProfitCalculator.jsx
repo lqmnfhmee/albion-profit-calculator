@@ -1,81 +1,248 @@
 import { useState } from "react";
 
 function ProfitCalculator() {
+
+    // ------------------------
+    // ANIMAL INPUTS
+    // ------------------------
+
     const [animals, setAnimals] = useState(36);
     const [babyPrice, setBabyPrice] = useState(2000);
     const [returnRate, setReturnRate] = useState(0.7);
-    const [foodPrice, setFoodPrice] = useState(5000);
-    const [foodProduced, setFoodProduced] = useState(9);
 
-    const missingAnimals = animals * (1 - returnRate);
+    // ------------------------
+    // FEED INPUTS
+    // ------------------------
+
+    const [feedPerAnimal, setFeedPerAnimal] = useState(9);
+    const [feedPrice, setFeedPrice] = useState(100);
+
+    // ------------------------
+    // CROP INPUTS
+    // ------------------------
+
+    const [plots, setPlots] = useState(11);
+    const [seedReturnRate, setSeedReturnRate] = useState(0.85);
+    const [seedPrice, setSeedPrice] = useState(140);
+
+    // ------------------------
+    // CRAFTING INPUTS
+    // ------------------------
+
+    const [butcherCostPerAnimal, setButcherCostPerAnimal] = useState(120);
+    const [animalsButchered, setAnimalsButchered] = useState(36);
+
+    const [stationFeePerBatch, setStationFeePerBatch] = useState(1800);
+    const [batchesCrafted, setBatchesCrafted] = useState(9);
+
+    // ------------------------
+    // MISSING INGREDIENT SYSTEM
+    // ------------------------
+
+    const [ingredients, setIngredients] = useState([
+        { name: "egg", quantity: 72, price: 400 }
+    ]);
+
+    const updateIngredient = (index, field, value) => {
+
+        const updated = [...ingredients];
+
+        updated[index][field] = value;
+
+        setIngredients(updated);
+    };
+
+    const addIngredient = () => {
+
+        setIngredients([
+            ...ingredients,
+            { name: "", quantity: 0, price: 0 }
+        ]);
+    };
+
+    // Calculate missing ingredient cost
+
+    const ingredientCost =
+        ingredients.reduce(
+            (total, item) =>
+                total +
+                item.quantity * item.price,
+            0
+        );
+
+    // ------------------------
+    // SELLING INPUTS
+    // ------------------------
+
+    const [foodProduced, setFoodProduced] = useState(9);
+    const [foodPrice, setFoodPrice] = useState(5000);
+
+    const [travelCost, setTravelCost] = useState(3000);
+
+    const [isPremium, setIsPremium] = useState(true);
+
+    // ------------------------
+    // CALCULATIONS
+    // ------------------------
+
+    const missingAnimals =
+        animals * (1 - returnRate);
 
     const replacementCost =
         missingAnimals * babyPrice;
 
-    const revenue =
-        foodProduced * foodPrice;
+    const feedCost =
+        animals *
+        feedPerAnimal *
+        feedPrice;
+
+    const missingSeeds =
+        plots * (1 - seedReturnRate);
+
+    const seedCost =
+        missingSeeds * seedPrice;
+
+    const farmingCost =
+        replacementCost +
+        feedCost +
+        seedCost +
+        travelCost;
+
+    const butcherCost =
+        animalsButchered *
+        butcherCostPerAnimal;
+
+    const stationCost =
+        batchesCrafted *
+        stationFeePerBatch;
+
+    const craftingCost =
+        butcherCost +
+        stationCost +
+        ingredientCost;
+
+    const grossRevenue =
+        foodProduced *
+        foodPrice;
+
+    const setupFee =
+        grossRevenue * 0.025;
+
+    const taxRate =
+        isPremium ? 0.04 : 0.08;
+
+    const marketplaceTax =
+        grossRevenue * taxRate;
+
+    const sellingCost =
+        setupFee +
+        marketplaceTax;
+
+    const totalCost =
+        farmingCost +
+        craftingCost +
+        sellingCost;
 
     const profit =
-        revenue - replacementCost;
+        grossRevenue - totalCost;
+
+    const breakEvenPrice =
+        totalCost / foodProduced;
+
+    // ------------------------
+    // UI
+    // ------------------------
 
     return (
+
         <div>
 
             <h2>Albion Profit Calculator</h2>
 
-            <label>Animals</label>
-            <input
-                type="number"
-                value={animals}
-                onChange={(e) =>
-                    setAnimals(Number(e.target.value))
-                }
-            />
+            <hr />
 
-            <label>Baby Price</label>
-            <input
-                type="number"
-                value={babyPrice}
-                onChange={(e) =>
-                    setBabyPrice(Number(e.target.value))
-                }
-            />
+            <h3>Missing Ingredients</h3>
 
-            <label>Return Rate</label>
-            <input
-                type="number"
-                step="0.01"
-                value={returnRate}
-                onChange={(e) =>
-                    setReturnRate(Number(e.target.value))
-                }
-            />
+            {
 
-            <label>Food Price</label>
-            <input
-                type="number"
-                value={foodPrice}
-                onChange={(e) =>
-                    setFoodPrice(Number(e.target.value))
-                }
-            />
+                ingredients.map((ingredient, index) => (
 
-            <label>Food Produced</label>
-            <input
-                type="number"
-                value={foodProduced}
-                onChange={(e) =>
-                    setFoodProduced(Number(e.target.value))
-                }
-            />
+                    <div key={index}>
 
-            <h3>Replacement Cost: {replacementCost}</h3>
+                        Name
+                        <input
+                            value={ingredient.name}
+                            onChange={(e) =>
+                                updateIngredient(
+                                    index,
+                                    "name",
+                                    e.target.value
+                                )
+                            }
+                        />
 
-            <h3>Revenue: {revenue}</h3>
+                        Quantity
+                        <input
+                            type="number"
+                            value={ingredient.quantity}
+                            onChange={(e) =>
+                                updateIngredient(
+                                    index,
+                                    "quantity",
+                                    Number(e.target.value)
+                                )
+                            }
+                        />
 
-            <h2>Profit: {profit}</h2>
+                        Price
+                        <input
+                            type="number"
+                            value={ingredient.price}
+                            onChange={(e) =>
+                                updateIngredient(
+                                    index,
+                                    "price",
+                                    Number(e.target.value)
+                                )
+                            }
+                        />
+
+                    </div>
+
+                ))
+
+            }
+
+            <button onClick={addIngredient}>
+                Add Ingredient
+            </button>
+
+            <hr />
+
+            Missing Ingredient Cost: {ingredientCost}
+
+            <hr />
+
+            Farming Cost: {farmingCost}
+
+            Crafting Cost: {craftingCost}
+
+            Selling Cost: {sellingCost}
+
+            Total Cost: {totalCost}
+
+            <hr />
+
+            Revenue: {grossRevenue}
+
+            Break-even Price: {breakEvenPrice.toFixed(2)}
+
+            <hr />
+
+            <h2>Final Profit: {profit}</h2>
 
         </div>
+
     );
 }
 
