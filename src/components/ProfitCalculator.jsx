@@ -2,45 +2,26 @@ import { useState } from "react";
 
 function ProfitCalculator() {
 
-    // ------------------------
-    // ANIMAL INPUTS
-    // ------------------------
+    // --------------------
+    // FARMING SECTION
+    // --------------------
 
-    const [animals, setAnimals] = useState(36);
-    const [babyPrice, setBabyPrice] = useState(2000);
-    const [returnRate, setReturnRate] = useState(0.7);
+    const [city, setCity] = useState("");
 
-    // ------------------------
-    // FEED INPUTS
-    // ------------------------
+    const [babyAnimalCost, setBabyAnimalCost] = useState("");
+    const [foodCost, setFoodCost] = useState("");
+    const [seedCost, setSeedCost] = useState("");
+    const [travelCost, setTravelCost] = useState("");
 
-    const [feedPerAnimal, setFeedPerAnimal] = useState(9);
-    const [feedPrice, setFeedPrice] = useState(100);
+    // --------------------
+    // CRAFTING SECTION
+    // --------------------
 
-    // ------------------------
-    // CROP INPUTS
-    // ------------------------
-
-    const [plots, setPlots] = useState(11);
-    const [seedReturnRate, setSeedReturnRate] = useState(0.85);
-    const [seedPrice, setSeedPrice] = useState(140);
-
-    // ------------------------
-    // CRAFTING INPUTS
-    // ------------------------
-
-    const [butcherCostPerAnimal, setButcherCostPerAnimal] = useState(120);
-    const [animalsButchered, setAnimalsButchered] = useState(36);
-
-    const [stationFeePerBatch, setStationFeePerBatch] = useState(1800);
-    const [batchesCrafted, setBatchesCrafted] = useState(9);
-
-    // ------------------------
-    // MISSING INGREDIENT SYSTEM
-    // ------------------------
+    const [butcherFee, setButcherFee] = useState("");
+    const [craftFee, setCraftFee] = useState("");
 
     const [ingredients, setIngredients] = useState([
-        { name: "egg", quantity: 72, price: 400 }
+        { name: "", cost: "" }
     ]);
 
     const updateIngredient = (index, field, value) => {
@@ -56,74 +37,46 @@ function ProfitCalculator() {
 
         setIngredients([
             ...ingredients,
-            { name: "", quantity: 0, price: 0 }
+            { name: "", cost: "" }
         ]);
+
     };
 
-    // Calculate missing ingredient cost
-
-    const ingredientCost =
+    const ingredientCostTotal =
         ingredients.reduce(
             (total, item) =>
-                total +
-                item.quantity * item.price,
+                total + Number(item.cost || 0),
             0
         );
 
-    // ------------------------
-    // SELLING INPUTS
-    // ------------------------
+    // --------------------
+    // SELLING SECTION
+    // --------------------
 
-    const [foodProduced, setFoodProduced] = useState(9);
-    const [foodPrice, setFoodPrice] = useState(5000);
-
-    const [travelCost, setTravelCost] = useState(3000);
+    const [itemName, setItemName] = useState("");
+    const [amount, setAmount] = useState("");
+    const [pricePerItem, setPricePerItem] = useState("");
 
     const [isPremium, setIsPremium] = useState(true);
 
-    // ------------------------
+    // --------------------
     // CALCULATIONS
-    // ------------------------
+    // --------------------
 
-    const missingAnimals =
-        animals * (1 - returnRate);
+    const totalFarmingCost =
+        Number(babyAnimalCost || 0) +
+        Number(foodCost || 0) +
+        Number(seedCost || 0) +
+        Number(travelCost || 0);
 
-    const replacementCost =
-        missingAnimals * babyPrice;
-
-    const feedCost =
-        animals *
-        feedPerAnimal *
-        feedPrice;
-
-    const missingSeeds =
-        plots * (1 - seedReturnRate);
-
-    const seedCost =
-        missingSeeds * seedPrice;
-
-    const farmingCost =
-        replacementCost +
-        feedCost +
-        seedCost +
-        travelCost;
-
-    const butcherCost =
-        animalsButchered *
-        butcherCostPerAnimal;
-
-    const stationCost =
-        batchesCrafted *
-        stationFeePerBatch;
-
-    const craftingCost =
-        butcherCost +
-        stationCost +
-        ingredientCost;
+    const totalCraftingCost =
+        Number(butcherFee || 0) +
+        Number(craftFee || 0) +
+        ingredientCostTotal;
 
     const grossRevenue =
-        foodProduced *
-        foodPrice;
+        Number(amount || 0) *
+        Number(pricePerItem || 0);
 
     const setupFee =
         grossRevenue * 0.025;
@@ -134,24 +87,22 @@ function ProfitCalculator() {
     const marketplaceTax =
         grossRevenue * taxRate;
 
-    const sellingCost =
-        setupFee +
+    const silverReceived =
+        grossRevenue -
+        setupFee -
         marketplaceTax;
 
     const totalCost =
-        farmingCost +
-        craftingCost +
-        sellingCost;
+        totalFarmingCost +
+        totalCraftingCost;
 
-    const profit =
-        grossRevenue - totalCost;
+    const finalProfit =
+        silverReceived -
+        totalCost;
 
-    const breakEvenPrice =
-        totalCost / foodProduced;
-
-    // ------------------------
+    // --------------------
     // UI
-    // ------------------------
+    // --------------------
 
     return (
 
@@ -161,7 +112,79 @@ function ProfitCalculator() {
 
             <hr />
 
-            <h3>Missing Ingredients</h3>
+            <h3>Farming Expenses</h3>
+
+            City
+
+            <select
+                value={city}
+                onChange={(e) =>
+                    setCity(e.target.value)
+                }
+            >
+
+                <option value="">Select City</option>
+                <option>Thetford</option>
+                <option>Martlock</option>
+                <option>Fort Sterling</option>
+                <option>Lymhurst</option>
+                <option>Bridgewatch</option>
+                <option>Brecillien</option>
+                <option>Caerleon</option>
+
+            </select>
+
+            <br /><br />
+
+            Baby Animal Cost
+            <input
+                onChange={e =>
+                    setBabyAnimalCost(e.target.value)
+                }
+            />
+
+            Food Cost
+            <input
+                onChange={e =>
+                    setFoodCost(e.target.value)
+                }
+            />
+
+            Seed Cost
+            <input
+                onChange={e =>
+                    setSeedCost(e.target.value)
+                }
+            />
+
+            Travel Cost
+            <input
+                onChange={e =>
+                    setTravelCost(e.target.value)
+                }
+            />
+
+            <p>Total Farming Cost: {totalFarmingCost}</p>
+
+            <hr />
+
+            <h3>Crafting Expenses</h3>
+
+            Butcher Fee
+            <input
+                onChange={e =>
+                    setButcherFee(e.target.value)
+                }
+            />
+
+            Craft Fee
+            <input
+                onChange={e =>
+                    setCraftFee(e.target.value)
+                }
+            />
+
+            <h4>Ingredient Costs</h4>
 
             {
 
@@ -170,6 +193,7 @@ function ProfitCalculator() {
                     <div key={index}>
 
                         Name
+
                         <input
                             value={ingredient.name}
                             onChange={(e) =>
@@ -181,28 +205,16 @@ function ProfitCalculator() {
                             }
                         />
 
-                        Quantity
-                        <input
-                            type="number"
-                            value={ingredient.quantity}
-                            onChange={(e) =>
-                                updateIngredient(
-                                    index,
-                                    "quantity",
-                                    Number(e.target.value)
-                                )
-                            }
-                        />
+                        Cost
 
-                        Price
                         <input
                             type="number"
-                            value={ingredient.price}
+                            value={ingredient.cost}
                             onChange={(e) =>
                                 updateIngredient(
                                     index,
-                                    "price",
-                                    Number(e.target.value)
+                                    "cost",
+                                    e.target.value
                                 )
                             }
                         />
@@ -217,29 +229,75 @@ function ProfitCalculator() {
                 Add Ingredient
             </button>
 
-            <hr />
+            <p>
+                Total Ingredient Cost:
+                {ingredientCostTotal}
+            </p>
 
-            Missing Ingredient Cost: {ingredientCost}
-
-            <hr />
-
-            Farming Cost: {farmingCost}
-
-            Crafting Cost: {craftingCost}
-
-            Selling Cost: {sellingCost}
-
-            Total Cost: {totalCost}
+            <p>
+                Total Crafting Cost:
+                {totalCraftingCost}
+            </p>
 
             <hr />
 
-            Revenue: {grossRevenue}
+            <h3>Selling Setup</h3>
 
-            Break-even Price: {breakEvenPrice.toFixed(2)}
+            Item Name
+
+            <input
+                onChange={e =>
+                    setItemName(e.target.value)
+                }
+            />
+
+            Amount
+
+            <input
+                onChange={e =>
+                    setAmount(e.target.value)
+                }
+            />
+
+            Price Per Item
+
+            <input
+                onChange={e =>
+                    setPricePerItem(e.target.value)
+                }
+            />
+
+            Premium Account
+
+            <input
+                type="checkbox"
+                checked={isPremium}
+                onChange={() =>
+                    setIsPremium(!isPremium)
+                }
+            />
+
+            <p>
+                Setup Fee (2.5%):
+                {setupFee.toFixed(0)}
+            </p>
+
+            <p>
+                Marketplace Tax:
+                {marketplaceTax.toFixed(0)}
+            </p>
+
+            <p>
+                Silver Received:
+                {silverReceived.toFixed(0)}
+            </p>
 
             <hr />
 
-            <h2>Final Profit: {profit}</h2>
+            <h2>
+                Final Profit:
+                {finalProfit.toFixed(0)}
+            </h2>
 
         </div>
 
