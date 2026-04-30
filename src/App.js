@@ -1,4 +1,4 @@
-import ProfitCalculator from "./components/ProfitCalculator";
+import ProfitCalculator from "./components/foodprodcalc/ProfitCalculator";
 
 function App() {
   return (
