@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import FarmingExpenses from "./FarmingExpenses";
 import CraftingExpenses from "./CraftingExpenses";
 import SellingSetup from "./SellingSetup";
@@ -26,6 +25,7 @@ function ProfitCalculator() {
     const [pricePerItem, setPricePerItem] = useState("");
 
     const [isPremium, setIsPremium] = useState(true);
+
 
 
     const updateIngredient = (index, field, value) => {
