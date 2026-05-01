@@ -1,40 +1,62 @@
+import { useNavigate } from "react-router-dom";
+import { useWallet } from "../context/WalletContext";
+
 function Dashboard() {
-  const stats = [
-    { label: "Total Transactions", value: "—", icon: "📋", color: "text-blue-600" },
-    { label: "Total Income", value: "—", icon: "💰", color: "text-green-600" },
-    { label: "Total Expenses", value: "—", icon: "📉", color: "text-red-500" },
-    { label: "Net Worth", value: "—", icon: "⚔️", color: "text-yellow-600" },
-  ];
+  const navigate = useNavigate();
+  const { getSilverBalance, getWeeklyChange, goldBalance } = useWallet();
+
+  const silverBalance = getSilverBalance();
+  const weeklyChange = getWeeklyChange();
+
+  const fmt = (n) =>
+    n.toLocaleString("en-US", { maximumFractionDigits: 0 });
+
+  const weeklySign = weeklyChange >= 0 ? "+" : "";
+  const weeklyArrow = weeklyChange >= 0 ? "↑" : "↓";
+  const weeklyColor = weeklyChange >= 0 ? "text-green-600" : "text-red-600";
 
   return (
     <div className="p-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Total Net Worth</h1>
-        <p className="text-gray-500 mt-1">
-          Welcome to your Albion Online Economy Planner dashboard.
-        </p>
-      </div>
+      {/* ── Dashboard Header ─────────────────────────────────────────── */}
+      <div className="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        {/* Left — Silver Balance */}
+        <div>
+          <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-1">
+            Total Silver Balance
+          </p>
+          <p className="text-4xl font-bold text-gray-900 leading-none">
+            {fmt(silverBalance)}
+          </p>
+          <p className={`mt-2 text-base font-semibold ${weeklyColor}`}>
+            {weeklySign}
+            {fmt(weeklyChange)} this week {weeklyArrow}
+          </p>
+        </div>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map(({ label, value, icon, color }) => (
-          <div
-            key={label}
-            className="bg-white rounded-xl shadow p-6 flex flex-col gap-2"
-          >
-            <div className="text-2xl">{icon}</div>
-            <p className="text-sm text-gray-500">{label}</p>
-            <p className={`text-2xl font-bold ${color}`}>{value}</p>
+        {/* Right — Gold Balance badge (clickable → /gold) */}
+        <button
+          id="gold-balance-btn"
+          onClick={() => navigate("/gold")}
+          className="flex items-center gap-2 bg-yellow-50 border border-yellow-300 rounded-xl px-5 py-3 hover:bg-yellow-100 transition-colors self-start sm:self-auto"
+          title="Open Gold Exchange"
+        >
+          <span className="text-2xl">🪙</span>
+          <div className="text-left">
+            <p className="text-xs text-yellow-700 font-semibold uppercase tracking-wide">
+              Gold
+            </p>
+            <p className="text-xl font-bold text-yellow-800 leading-none">
+              {fmt(goldBalance)}
+            </p>
           </div>
-        ))}
+        </button>
       </div>
 
-      {/* Quick Links */}
+      {/* ── Quick Links ──────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-semibold text-gray-700 mb-2">
-            🌾 Production Planner
+            🌾 Food Production Calculator
           </h2>
           <p className="text-gray-500 text-sm">
             Calculate farming costs, crafting expenses, and profit margins for
@@ -44,7 +66,7 @@ function Dashboard() {
             href="/production"
             className="inline-block mt-4 px-4 py-2 bg-yellow-400 text-gray-900 font-semibold rounded-lg text-sm hover:bg-yellow-300 transition-colors"
           >
-            Open Planner →
+            Open Calculator →
           </a>
         </div>
 

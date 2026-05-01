@@ -115,7 +115,7 @@ function ProfitCalculator() {
         <div className="min-h-screen bg-gray-100 p-8">
 
             <h1 className="text-3xl font-bold mb-6">
-                Albion Profit Calculator
+                Food Production Calculator
             </h1>
 
 

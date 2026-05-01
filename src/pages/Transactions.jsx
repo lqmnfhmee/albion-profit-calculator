@@ -1,22 +1,9 @@
-import { useState, useEffect } from "react";
+import { useWallet } from "../context/WalletContext";
 import TransactionEntry from "../components/transactions/TransactionEntry";
 import RecentTransaction from "../components/transactions/RecentTransaction";
 
 function Transactions() {
-  const [transactions, setTransactions] = useState([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("transactions");
-    if (saved) {
-      setTransactions(JSON.parse(saved));
-    }
-  }, []);
-
-  const addTransaction = (transaction) => {
-    const updated = [...transactions, transaction];
-    setTransactions(updated);
-    localStorage.setItem("transactions", JSON.stringify(updated));
-  };
+  const { transactions, addTransaction } = useWallet();
 
   return (
     <div className="p-8">
